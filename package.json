@@ -1,0 +1,14 @@
+{
+  "name": "eatexpress",
+  "version": "1.0.0",
+  "description": "eat express is application for food restaurant online ordering",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express"
+  ],
+  "author": "",
+  "license": "ISC"
+}
