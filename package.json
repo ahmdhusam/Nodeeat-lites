@@ -1,5 +1,5 @@
 {
-  "name": "eatexpress",
+  "name": "nodeeat-lites",
   "version": "1.0.0",
   "description": "eat express is application for food restaurant online ordering",
   "main": "src/index.ts",
