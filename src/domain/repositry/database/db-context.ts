@@ -17,7 +17,6 @@ class DBContext {
       entities: [Customer, MenuItem, Cart, CartItem],
       synchronize: process.env.NODE_ENV === "development",
       logging: true,
-      dropSchema: true,
     });
   }
 
