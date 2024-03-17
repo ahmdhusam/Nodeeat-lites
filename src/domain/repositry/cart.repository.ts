@@ -1,5 +1,5 @@
 import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
-import { Cart } from "../model/cart.entity";
+import { Cart } from "../models/cart.entity";
 import { dbContext } from "./database/db-context";
 import { BaseRepository } from "./base.repository";
 
