@@ -8,6 +8,10 @@ import { CartItem } from "../models/cart-item.entity";
 export class CartItemService {
   constructor(private readonly cartItemRepo: CartItemRepository) {}
 
+  async findBy(where: FindOptionsWhere<CartItem>): Promise<CartItem[]> {
+    return this.cartItemRepo.findBy(where);
+  }
+
   async isExistBy(where: FindOptionsWhere<CartItem>): Promise<boolean> {
     return this.cartItemRepo.isExistBy(where);
   }

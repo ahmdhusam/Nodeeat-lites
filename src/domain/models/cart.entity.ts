@@ -13,7 +13,7 @@ export class Cart extends BaseEntityTemp {
   @PrimaryGeneratedColumn({ name: "cart_id" })
   id: number;
 
-  @Column({ name: "total_amount" })
+  @Column({ name: "total_amount", type: "money" })
   totalAmount: number;
 
   @Column({ name: "customer_id" })
