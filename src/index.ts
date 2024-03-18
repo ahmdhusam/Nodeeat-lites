@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import httpStatus from "http-status";
@@ -7,6 +7,7 @@ import winston from "winston";
 import dotenv from "dotenv";
 import { dbContext } from "./domain/repositry/database/db-context";
 import { router as cartRouter } from "./domain/routes/cart.router";
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,8 +19,15 @@ app.use(morgan("dev"));
 
 // Routes
 app.use("/api/v1/carts", cartRouter);
-app.use("/", (req: any, res: any) => {
+app.use("/", (req: Request, res: Response) => {
   res.send("HELLO world any ");
+});
+
+// Express Error Handler
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  res
+    .status(500)
+    .send({ message: "Something went wrong. Please try again later." });
 });
 
 // Start the server
