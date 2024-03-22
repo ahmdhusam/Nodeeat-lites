@@ -1,0 +1,9 @@
+## database scripts
+
+this script to test endpoints for dummy data.
+
+```sql
+INSERT INTO customer(username, email) VALUES('John wick','John.wick@gmail.com');
+INSERT INTO cart(customer_id, total_amount) VALUES(1,0);
+INSERT INTO menu_item(menu_item_id) VALUES(1);
+```

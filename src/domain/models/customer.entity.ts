@@ -1,4 +1,4 @@
-import { Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntityTemp } from "./templates/base.temp";
 import { Cart } from "./cart.entity";
 
@@ -9,4 +9,10 @@ export class Customer extends BaseEntityTemp {
 
   @OneToOne(() => Cart, (cart) => cart.customer)
   cart: Cart;
+
+  @Column()
+  username: string;
+
+  @Column({ unique: true })
+  email: string;
 }
