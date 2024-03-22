@@ -15,7 +15,7 @@ export class CartItem extends BaseEntityTemp {
   id: number;
 
   @Column({ type: "money" })
-  price: string;
+  price: number;
 
   @Column()
   quantity: number;
