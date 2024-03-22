@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  api:
+    environment:
+      NODE_ENV: production
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx-config/templates:/etc/nginx/templates
+      - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf # default.conf file
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NGINX_HOST=foobar.com
+      - NGINX_PORT=80
+    depends_on:
+      - api

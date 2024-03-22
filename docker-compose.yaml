@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14.5
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_backups:/backups
+
+  redis:
+    image: redis:5.0
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: . # backend directory
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8000:3000"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./:/app
+    depends_on:
+      - postgres
+      - redis
+
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+  #   ports:
+  #     - "9200:9200"
+  #     - "9300:9300"
+  #   environment:
+  #     - discovery.type=single-node
+
+volumes:
+  postgres_data:
+  postgres_backups:
