@@ -37,6 +37,10 @@ export class CartItemRepository extends BaseRepository<CartItem> {
   findByCartId(id: number): Promise<CartItem[]> {
     return this.findBy({ cartId: id });
   }
+
+  async deleteBy(where: FindOptionsWhere<CartItem>): Promise<void> {
+    await this.cartItemRepo.delete(where);
+  }
 }
 
 export const cartItemRepository = new CartItemRepository(
