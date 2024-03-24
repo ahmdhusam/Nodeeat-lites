@@ -24,7 +24,7 @@ export const UpdateOrderStatus = async (
   try {
   } catch (error: any) {}
 };
-export const OrderHistory = async (
+export const OrdersHistory = async (
   req: Request,
   res: Response
 ): Promise<void> => {

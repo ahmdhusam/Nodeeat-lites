@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 
 import { BaseRepository } from "./base.repository";
 import { Order } from "../models/Order";
@@ -7,7 +7,9 @@ export class OrderRepository extends BaseRepository<Order> {
   constructor(private readonly OrderRepo: Repository<Order>) {
     super(OrderRepo);
   }
-
+  findBy(where: FindOptionsWhere<Order>): Promise<Order[]> {
+    return this.OrderRepo.findBy(where);
+  }
   /**
    * Find a Order by ID.
    *
