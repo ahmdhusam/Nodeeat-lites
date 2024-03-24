@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { cartItemRepository } from "../repositry/cart-item.repository";
-import { cartRepository } from "../repositry/cart.repository";
+import { cartRepository } from "../repositry/CartRepository";
 
 export const addCartItem = async (
   req: Request,

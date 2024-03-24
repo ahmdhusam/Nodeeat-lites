@@ -6,7 +6,8 @@ import morgan from "morgan";
 import winston from "winston";
 import dotenv from "dotenv";
 import { dbContext } from "./domain/repositry/database/db-context";
-import { router as cartRouter } from "./domain/routes/cart.router";
+import { router as cartRouter } from "./domain/routes/CartRouter";
+import { router as orderRouter } from "./domain/routes/OrderRouter";
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,7 @@ app.use(morgan("dev"));
 
 // Routes
 app.use("/api/v1/carts", cartRouter);
+app.use("/api/v1/Orders", orderRouter);
 app.use("/", (req: Request, res: Response) => {
   res.send("HELLO world any ");
 });

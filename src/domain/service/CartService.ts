@@ -1,6 +1,6 @@
 import { NotFoundException } from "../../common/exceptions";
 import { Cart } from "../models/cart.entity";
-import { CartRepository, cartRepository } from "../repositry/cart.repository";
+import { CartRepository, cartRepository } from "../repositry/CartRepository";
 import { CartItemService, cartItemService } from "./cart-item.service";
 
 export class CartService {

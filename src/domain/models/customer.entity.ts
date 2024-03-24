@@ -1,6 +1,13 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { BaseEntityTemp } from "./templates/base.temp";
 import { Cart } from "./cart.entity";
+import { Order } from "./Order";
 
 @Entity("customer")
 export class Customer extends BaseEntityTemp {
@@ -15,4 +22,7 @@ export class Customer extends BaseEntityTemp {
 
   @Column({ unique: true })
   email: string;
+
+  @OneToMany(() => Order, (order) => order.customer)
+  orders: Order[];
 }

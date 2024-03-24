@@ -1,10 +1,9 @@
 import { Router, Request, Response } from "express";
-import * as CartController from "../controllers/cart.controller";
+import * as CartController from "../controllers/CartController";
 import {
   addCartItem,
   viewCartItems,
 } from "../controllers/cart-item.controller";
-
 
 export const router: Router = Router();
 
@@ -16,4 +15,3 @@ router
   .post(addCartItem);
 
 router.route("/:cartId").delete(CartController.clearCart);
-

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { cartRepository } from "../repositry/cart.repository";
+import { cartRepository } from "../repositry/CartRepository";
 import { cartItemRepository } from "../repositry/cart-item.repository";
-import { cartService } from "../service/cart.service";
+import { cartService } from "../service/CartService";
 import { HttpException } from "../../common/exceptions";
 
 // export const getCart = async (req: Request, res: Response): Promise<void> => {
