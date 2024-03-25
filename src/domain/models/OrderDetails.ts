@@ -1,18 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToOne,
+  JoinColumn,
+} from "typeorm";
 import { Order } from "./Order";
 import { MenuItem } from "./menu-item.entity";
 import { BaseEntityTemp } from "./templates/base.temp";
 
-@Entity()
+@Entity("order_details")
 export class OrderDetails extends BaseEntityTemp {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: "order_details_id" })
   id: number;
-
-  @Column({ type: "timestamp" })
-  created_at: Date;
-
-  @Column({ type: "timestamp" })
-  updated_at: Date;
 
   @Column({ type: "float" })
   order_details_price: number;
@@ -20,9 +21,10 @@ export class OrderDetails extends BaseEntityTemp {
   @Column({ type: "integer" })
   order_details_quantity: number;
 
-  // @ManyToOne(() => MenuItem, menuItem => menuItem.orderDetails)
-  // menu_item: MenuItem;
+  @OneToOne(() => MenuItem)
+  menu_item: MenuItem;
 
-  // @ManyToOne(() => Order, order => order.orderDetails)
-  // order: Order;
+  @ManyToOne(() => Order, (order) => order.id)
+  @JoinColumn({ name: "order_id" })
+  order: Order;
 }
