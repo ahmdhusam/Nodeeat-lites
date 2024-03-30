@@ -27,4 +27,5 @@ export class OrderDetails extends BaseEntityTemp {
   @ManyToOne(() => Order, (order) => order.id)
   @JoinColumn({ name: "order_id" })
   order: Order;
+  orderDetails: Promise<MenuItem | null>;
 }

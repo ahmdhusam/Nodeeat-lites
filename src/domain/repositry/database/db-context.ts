@@ -27,7 +27,7 @@ class DBContext {
         OrderDetails,
         OrderStatus,
       ],
-      synchronize: process.env.NODE_ENV === "development",
+      synchronize: true,
       logging: true,
     });
   }

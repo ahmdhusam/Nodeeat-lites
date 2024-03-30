@@ -1,14 +1,29 @@
 import { Request, Response } from "express";
 import { Order } from "../models/Order";
+import { OrderDetails } from "../models/OrderDetails";
 import { OrderRepository } from "../repositry/OrderRepositry";
 import { orderService } from "../service/OrderService";
+import { MenuItem } from "../models/menu-item.entity";
+import { customerService } from "../service/CustomerService";
+import { HttpException } from "../../common/exceptions";
+import { menuItemService } from "../service/MenuItemService";
 
 export const PlaceOrder = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  // Extract data from the request body
+  const { cartId } = req.body;
+
   try {
-  } catch (error: any) {}
+    console.log(req.body);
+
+    let oreder = await orderService.PlaceOrder(cartId);
+
+    res.status(201).json({ message: "Order created successfully", oreder });
+  } catch (error: any) {
+    res.status(400).json({ message: error.details, debug: "error in catch" });
+  }
 };
 
 export const CancelOrder = async (
@@ -40,7 +55,7 @@ export const OrdersHistory = async (
   }
 };
 
-export const OrderDetails = async (
+export const Order_Details = async (
   req: Request,
   res: Response
 ): Promise<void> => {
