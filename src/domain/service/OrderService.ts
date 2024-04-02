@@ -28,10 +28,9 @@ export class OrderService {
     let orderDetails: OrderDetails[] = [];
     for (const cartItem of cartItems) {
       let orderDetail = new OrderDetails();
-      orderDetail.menu_item = (await this.menuRepo.findOneById(
-        cartItem.menuItemId
-      ))!;
-      orderDetail.order = order;
+      orderDetail.menu_itemId = cartItem.menuItemId;
+
+      // orderDetail.order = order;
       orderDetail.order_details_quantity = cartItem.quantity;
       orderDetail.order_details_price = cartItem.price;
       orderDetails.push(orderDetail);
@@ -39,6 +38,7 @@ export class OrderService {
     order.order_details = orderDetails;
     order.order_status = 1;
     order.order_total_amount = 0;
+
     // orderDetails.forEach(
     //   (a) =>
     //     (order.order_total_amount +=
@@ -46,9 +46,14 @@ export class OrderService {
     // );
 
     console.log(order);
-    let createdOrder = await this.orderRepo.create(order);
+    console.log("---BeforeCreate---");
+    let createdOrder = this.orderRepo.create(order);
+    console.log("---AfterCreate---");
     console.log(createdOrder);
-    await this.orderRepo.save(createdOrder);
+    console.log("---before save---");
+    var saved = await this.orderRepo.save(createdOrder);
+    console.log(saved);
+    console.log("---after save---");
     return createdOrder;
   }
   async findBy(where: FindOptionsWhere<Order>): Promise<Order[]> {

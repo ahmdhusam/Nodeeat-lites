@@ -21,6 +21,9 @@ export class OrderDetails extends BaseEntityTemp {
   @Column({ type: "integer" })
   order_details_quantity: number;
 
+  @Column({ name: "menu_item_id", nullable: true })
+  menu_itemId: number;
+
   @OneToOne(() => MenuItem)
   menu_item: MenuItem;
 
