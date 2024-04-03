@@ -1,61 +1,47 @@
-import { FindOptionsWhere } from "typeorm";
-import { NotFoundException } from "../../common/exceptions";
+import { DeepPartial, FindOptionsWhere } from "typeorm";
 import { Order } from "../models/Order";
 import { orderRepository, OrderRepository } from "../repositry/OrderRepositry";
-import { cartRepository, CartRepository } from "../repositry/CartRepository";
 import {
   cartItemRepository,
   CartItemRepository,
 } from "../repositry/cart-item.repository";
-import { forEachChild } from "typescript";
 import { OrderDetails } from "../models/OrderDetails";
 import {
   menuItemRepository,
   MenuItemRepository,
 } from "../repositry/MenuItemRepository";
+import { CartService, cartService } from "./CartService";
 
 export class OrderService {
   constructor(
     private readonly orderRepo: OrderRepository,
-    private readonly menuRepo: MenuItemRepository,
-    private readonly cartItemsRepo: CartItemRepository
+    private readonly cartService: CartService
   ) {}
-  async PlaceOrder(cartId: number): Promise<Order> {
-    let cartItems = await this.cartItemsRepo.findByCartId(cartId);
 
-    console.log(cartItems);
-    let order = new Order();
-    let orderDetails: OrderDetails[] = [];
-    for (const cartItem of cartItems) {
-      let orderDetail = new OrderDetails();
-      orderDetail.menu_itemId = cartItem.menuItemId;
+  async PlaceOrder(cartId: number) {
+    const cart = await this.cartService.getCartById(cartId);
+    const { cartItems } = cart;
 
-      // orderDetail.order = order;
-      orderDetail.order_details_quantity = cartItem.quantity;
-      orderDetail.order_details_price = cartItem.price;
-      orderDetails.push(orderDetail);
-    }
-    order.order_details = orderDetails;
-    order.order_status = 1;
-    order.order_total_amount = 0;
+    const order_details: DeepPartial<OrderDetails>[] = cartItems.map(
+      (item) => ({
+        menu_itemId: item.menuItemId,
+        order_details_price: item.price,
+        order_details_quantity: item.quantity,
+      })
+    );
 
-    // orderDetails.forEach(
-    //   (a) =>
-    //     (order.order_total_amount +=
-    //       a.order_details_price * a.order_details_quantity)
-    // );
+    const createdOrder = await this.orderRepo.createOrder({
+      customer: { id: cart.customerId },
+      order_status: 1,
+      order_total_amount: cart.totalAmount,
+      order_details,
+    });
 
-    console.log(order);
-    console.log("---BeforeCreate---");
-    let createdOrder = this.orderRepo.create(order);
-    console.log("---AfterCreate---");
-    console.log(createdOrder);
-    console.log("---before save---");
-    var saved = await this.orderRepo.save(createdOrder);
-    console.log(saved);
-    console.log("---after save---");
+    await this.cartService.clear(cartId);
+
     return createdOrder;
   }
+
   async findBy(where: FindOptionsWhere<Order>): Promise<Order[]> {
     return await this.orderRepo.findBy(where);
   }
@@ -67,8 +53,4 @@ export class OrderService {
   }
 }
 
-export const orderService = new OrderService(
-  orderRepository,
-  menuItemRepository,
-  cartItemRepository
-);
+export const orderService = new OrderService(orderRepository, cartService);

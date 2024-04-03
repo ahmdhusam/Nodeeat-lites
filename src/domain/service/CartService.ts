@@ -9,6 +9,15 @@ export class CartService {
     private readonly cartItemService: CartItemService
   ) {}
 
+  async getCartById(cartId: number) {
+    const cart = await this.cartRepo.findOneById(cartId);
+    if (!cart) {
+      throw new NotFoundException("Cart not found");
+    }
+
+    return cart;
+  }
+
   async calculateTotalPrice(cartId: number): Promise<number> {
     // TODO: Use database to calculate total price or calculate it on the server
 
