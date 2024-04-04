@@ -39,7 +39,7 @@ export class CartService {
 
     await this.cartItemService.deleteBy({ cartId });
 
-    cart.totalAmount = await this.calculateTotalPrice(cart.id); // Or set it to 0 directly
+    cart.totalAmount = 0; // await this.calculateTotalPrice(cart.id); // Or set it to 0 directly
 
     await this.cartRepo.save(cart);
   }
