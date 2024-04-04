@@ -27,7 +27,7 @@ class DBContext {
         OrderDetails,
         OrderStatus,
       ],
-      synchronize: true,
+      // synchronize: true,
       logging: true,
     });
   }
