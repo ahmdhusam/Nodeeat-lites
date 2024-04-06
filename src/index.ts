@@ -3,11 +3,12 @@ import bodyParser from "body-parser";
 import helmet from "helmet";
 import httpStatus from "http-status";
 import morgan from "morgan";
-import winston from "winston";
+
+import swaggerUi from "swagger-ui-express";
+import swaggerOutput from "./swagger_output.json";
 import dotenv from "dotenv";
 import { dbContext } from "./domain/repositry/database/db-context";
-import { router as cartRouter } from "./domain/routes/CartRouter";
-import { router as orderRouter } from "./domain/routes/OrderRouter";
+import { routes } from "./domain/routes/routes.index";
 
 dotenv.config();
 const app = express();
@@ -19,11 +20,11 @@ app.use(helmet());
 app.use(morgan("dev"));
 
 // Routes
-app.use("/api/v1/carts", cartRouter);
-app.use("/api/v1/Orders", orderRouter);
-app.use("/", (req: Request, res: Response) => {
-  res.send("HELLO world any a ");
-});
+app.use("/", routes);
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+// app.use("/", (req: Request, res: Response) => {
+//   res.send("HELLO world any a ");
+// });
 
 // Express Error Handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
