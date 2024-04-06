@@ -13,7 +13,7 @@ export const PlaceOrder = async (
   res: Response
 ): Promise<void> => {
   // Extract data from the request body
-  const { cartId } = req.body;
+  const cartId = parseInt(req.params.cartId);
 
   try {
     console.log(req.body);
