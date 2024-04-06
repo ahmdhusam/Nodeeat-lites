@@ -4,10 +4,10 @@ import {
   addCartItem,
   viewCartItems,
 } from "../controllers/cart-item.controller";
-
+const route = "/api/v1/Carts";
 export const router: Router = Router();
 
-router.route("/:cartId").get(viewCartItems);
+router.route(`/:cartId`).get(viewCartItems);
 
 router
   .route("/:cartId/cart-items/:cartItemId")

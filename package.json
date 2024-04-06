@@ -4,9 +4,11 @@
   "description": "eat express is application for food restaurant online ordering",
   "main": "src/index.ts",
   "scripts": {
+    "start-dev": "npm run swagger && npm run dev  ",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon -L src/index.ts",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "swagger": "ts-node src/swagger.ts"
   },
   "keywords": [
     "express"
@@ -22,7 +24,7 @@
     "@types/nodemon": "^1.19.6",
     "@types/swagger-ui-express": "^4.1.6",
     "dotenv": "^16.4.5",
-    "express": "^4.18.3",
+    "express": "^4.19.2",
     "helmet": "^7.1.0",
     "http-status": "^1.7.4",
     "joi": "^17.12.2",
