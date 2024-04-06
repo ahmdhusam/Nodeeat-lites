@@ -11,6 +11,8 @@ import {
   MenuItemRepository,
 } from "../repositry/MenuItemRepository";
 import { CartService, cartService } from "./CartService";
+import { NotFoundException } from "../../common/exceptions";
+import { BadRequestException } from "../../common/exceptions/BadRequestException";
 
 export class OrderService {
   constructor(
@@ -22,6 +24,9 @@ export class OrderService {
     const cart = await this.cartService.getCartById(cartId);
     const { cartItems } = cart;
 
+    if (cartItems.length < 1) {
+      throw new BadRequestException("Cart is empty");
+    }
     const order_details: DeepPartial<OrderDetails>[] = cartItems.map(
       (item) => ({
         menu_itemId: item.menuItemId,

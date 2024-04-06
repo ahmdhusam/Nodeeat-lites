@@ -22,8 +22,13 @@ export const PlaceOrder = async (
 
     res.status(201).json({ message: "Order created successfully", oreder });
   } catch (error: any) {
-    console.log(error);
-    res.status(400).json({ message: error, debug: "error in catch" });
+    if (error instanceof HttpException) {
+      res.status(error.status).json({ error: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ error: "Something went wrong. Please try again later" });
+    }
   }
 };
 
