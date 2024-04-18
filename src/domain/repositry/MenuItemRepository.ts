@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 
-import { MenuItem } from "../models/menu-item.entity";
-import { BaseRepository } from "./base.repository";
+import { MenuItem } from "../models/MenuItem";
+import { BaseRepository } from "./BaseRepository";
 import { dbContext } from "./database/db-context";
 
 export class MenuItemRepository extends BaseRepository<MenuItem> {

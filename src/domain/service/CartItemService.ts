@@ -2,8 +2,8 @@ import { FindOptionsWhere } from "typeorm";
 import {
   CartItemRepository,
   cartItemRepository,
-} from "../repositry/cart-item.repository";
-import { CartItem } from "../models/cart-item.entity";
+} from "../repositry/CartItemRepository";
+import { CartItem } from "../models/CartItem";
 
 export class CartItemService {
   constructor(private readonly cartItemRepo: CartItemRepository) {}

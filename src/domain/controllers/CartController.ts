@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { cartRepository } from "../repositry/CartRepository";
-import { cartItemRepository } from "../repositry/cart-item.repository";
+import { cartItemRepository } from "../repositry/CartItemRepository";
 import { cartService } from "../service/CartService";
 import { HttpException } from "../../common/exceptions";
 

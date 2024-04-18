@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { BaseEntityTemp } from "./templates/base.temp";
-import { Cart } from "./cart.entity";
-import { CartItem } from "./cart-item.entity";
+import { Cart } from "./Cart";
+import { CartItem } from "./CartItem";
 import { OrderDetails } from "./OrderDetails";
 
 @Entity("menu_item")

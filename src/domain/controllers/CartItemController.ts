@@ -1,23 +1,41 @@
 import { Request, Response } from "express";
-import { cartItemRepository } from "../repositry/cart-item.repository";
+import { cartItemRepository } from "../repositry/CartItemRepository";
 import { cartRepository } from "../repositry/CartRepository";
+import { logger } from "../../common/logger";
+import { StatusCodes } from "http-status-codes";
 
 export const addCartItem = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  /*
+
+- Get customerid 
+- get customerCart 
+- if no cart create cart 
+- add cartitem 
+
+*/
+
   const cartId = parseInt(req.params.cartId);
   const cartItemId = parseInt(req.params.cartItemId);
+  const customerId = parseInt(req.params.customerId);
+  const quantity: number = parseInt(req.query.quantity as string);
 
-  console.log(cartItemId, cartId);
+  logger.debug(
+    `CustomerId:${customerId}, CartId:${cartId},CartItemId:${cartItemId},quantity:${quantity}`
+  );
+
   try {
     const cart = await cartRepository.findOneById(cartId);
     if (!cart) {
-      throw Error("Cart does not exist");
+      // const cartId = await createCart(req, res);
     }
   } catch (error: any) {
     console.log(error.message);
-    res.status(400).json({ message: error.message });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
     return;
   }
 
@@ -68,9 +86,9 @@ export const viewCartItems = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const cartId = parseInt(req.params.cartId);
+  const customerId = parseInt(req.params.customerId);
 
-  console.log(cartId);
+  logger.debug(`customerId:${customerId}`);
   try {
     const cartItems = await cartItemRepository.findByCartId(cartId);
     res.status(200).json({ details: cartItems });

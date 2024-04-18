@@ -4,7 +4,7 @@ import { orderRepository, OrderRepository } from "../repositry/OrderRepositry";
 import {
   cartItemRepository,
   CartItemRepository,
-} from "../repositry/cart-item.repository";
+} from "../repositry/CartItemRepository";
 import { OrderDetails } from "../models/OrderDetails";
 import {
   menuItemRepository,

@@ -1,10 +1,10 @@
 import "reflect-metadata";
 import { DataSource, ObjectLiteral } from "typeorm";
 import dotenv from "dotenv";
-import { Customer } from "../../models/customer.entity";
-import { MenuItem } from "../../models/menu-item.entity";
-import { Cart } from "../../models/cart.entity";
-import { CartItem } from "../../models/cart-item.entity";
+import { Customer } from "../../models/Customer";
+import { MenuItem } from "../../models/MenuItem";
+import { Cart } from "../../models/Cart";
+import { CartItem } from "../../models/CartItem";
 import { Order } from "../../models/Order";
 import { OrderDetails } from "../../models/OrderDetails";
 import { OrderStatus } from "../../models/OrderStatus";

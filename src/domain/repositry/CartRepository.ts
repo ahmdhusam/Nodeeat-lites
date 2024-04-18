@@ -1,7 +1,7 @@
 import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
-import { Cart } from "../models/cart.entity";
+import { Cart } from "../models/Cart";
 import { dbContext } from "./database/db-context";
-import { BaseRepository } from "./base.repository";
+import { BaseRepository } from "./BaseRepository";
 
 export class CartRepository extends BaseRepository<Cart> {
   constructor(private readonly cartRepo: Repository<Cart>) {

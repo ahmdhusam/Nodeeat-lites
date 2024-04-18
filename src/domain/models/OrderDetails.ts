@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import { Order } from "./Order";
-import { MenuItem } from "./menu-item.entity";
+import { MenuItem } from "./MenuItem";
 import { BaseEntityTemp } from "./templates/base.temp";
 
 @Entity("order_details")

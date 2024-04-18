@@ -1,6 +1,6 @@
 import { FindOptionsWhere, Repository } from "typeorm";
-import { Customer } from "../models/customer.entity";
-import { BaseRepository } from "./base.repository";
+import { Customer } from "../models/Customer";
+import { BaseRepository } from "./BaseRepository";
 import { dbContext } from "./database/db-context";
 
 export class CustomerRepository extends BaseRepository<Customer> {
