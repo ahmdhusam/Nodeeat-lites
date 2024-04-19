@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { BaseEntityTemp } from "./templates/base.temp";
-import { Customer } from "./customer.entity";
+import { Customer } from "./Customer";
 import { CartItem } from "./cart-item.entity";
 
 @Entity("cart")

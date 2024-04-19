@@ -1,5 +1,5 @@
 import { FindOptionsWhere, Repository } from "typeorm";
-import { Customer } from "../models/customer.entity";
+import { Customer } from "../models/Customer";
 import { BaseRepository } from "./base.repository";
 import { dbContext } from "./database/db-context";
 

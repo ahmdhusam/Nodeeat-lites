@@ -1,4 +1,4 @@
-import { Customer } from "../models/customer.entity";
+import { Customer } from "../models/Customer";
 import {
   CustomerRepository,
   customerRepository,

@@ -3,7 +3,7 @@ import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
 import { BaseRepository } from "./base.repository";
 import { Order } from "../models/Order";
 import { dbContext } from "./database/db-context";
-import { Customer } from "../models/customer.entity";
+import { Customer } from "../models/Customer";
 import { OrderStatus } from "../models/OrderStatus";
 import { OrderDetails } from "../models/OrderDetails";
 
