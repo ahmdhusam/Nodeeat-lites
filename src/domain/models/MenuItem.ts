@@ -15,6 +15,8 @@ export class MenuItem extends BaseEntityTemp {
   @PrimaryGeneratedColumn({ name: "menu_item_id" })
   id: number;
 
+  price: number;
+
   @OneToOne(() => OrderDetails, (orderDetails) => orderDetails.id)
   order_details: OrderDetails;
 }

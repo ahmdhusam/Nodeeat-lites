@@ -1,49 +1,39 @@
 import { Request, Response } from "express";
 import { cartRepository } from "../repositry/CartRepository";
 import { cartItemRepository } from "../repositry/CartItemRepository";
-import { cartService } from "../service/CartService";
+import { CartService, cartService } from "../service/CartService";
 import { HttpException } from "../../common/exceptions";
+import { logger } from "../../common/logger";
+import { StatusCodes, getReasonPhrase } from "http-status-codes";
+class CartController {
+  constructor(private readonly cartService: CartService) {}
 
-// export const getCart = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const cartId = parseInt(req.params.cartId);
-//     let cart = await cartRepository.findOneById(cartId);
+  async GetCart(req: Request, res: Response): Promise<void> {
+    const customerId = parseInt(req.params.customerId);
 
-//     console.log("cart controller");
-//     res.status(200).json({ cart });
-//   } catch (error: any) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-export const deleteCartItem = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const cartId = parseInt(req.params.cartId);
-    await cartItemRepository.deleteById(cartId);
-
-    res.status(200).json({});
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-export const clearCart = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const cartId = parseInt(req.params.cartId);
-
-    await cartService.clear(cartId);
-
-    res.status(200).json({ message: "Cart cleared successfully" });
-  } catch (error: unknown) {
-    if (error instanceof HttpException) {
-      res.status(error.status).json({ error: error.message });
-    } else {
+    logger.debug(`customerId:${customerId}`);
+    try {
+      const cart = await this.cartService.GetCartByCustomerId(customerId);
+      res.status(StatusCodes.OK).json({ details: cart });
+    } catch (error) {
       res
-        .status(500)
-        .json({ error: "Something went wrong. Please try again later" });
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
     }
   }
-};
+
+  async ClearCart(req: Request, res: Response): Promise<void> {
+    try {
+      const customerId = parseInt(req.params.customerId);
+
+      await cartService.clear(customerId);
+
+      res.status(StatusCodes.OK).json({ message: "Cart cleared successfully" });
+    } catch (error) {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
+    }
+  }
+}
+export const cartController = new CartController(cartService);

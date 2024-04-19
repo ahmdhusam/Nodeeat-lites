@@ -21,7 +21,7 @@ export class OrderService {
   ) {}
 
   async PlaceOrder(cartId: number) {
-    const cart = await this.cartService.getCartById(cartId);
+    const cart = await this.cartService.GetCartById(cartId);
     const { cartItems } = cart;
 
     if (cartItems.length < 1) {
