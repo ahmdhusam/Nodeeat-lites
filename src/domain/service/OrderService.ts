@@ -2,17 +2,15 @@ import { DeepPartial, FindOptionsWhere } from "typeorm";
 import { Order } from "../models/Order";
 import { orderRepository, OrderRepository } from "../repositry/OrderRepositry";
 import {
-  cartItemRepository,
-  CartItemRepository,
-} from "../repositry/CartItemRepository";
-import { OrderDetails } from "../models/OrderDetails";
-import {
-  menuItemRepository,
-  MenuItemRepository,
-} from "../repositry/MenuItemRepository";
+  InventoryCheckHandler,
+  LockCartHandler,
+  OrderCreateHandler,
+  PaymentHandler,
+  ReleaseLockCartHandler,
+} from "./OrderHandler/IHandler";
 import { CartService, cartService } from "./CartService";
-import { NotFoundException } from "../../common/exceptions";
-import { BadRequestException } from "../../common/exceptions/BadRequestException";
+import { OrderProcessor } from "./OrderHandler/OrderProcessor";
+import { Cart } from "../models/Cart";
 
 export class OrderService {
   constructor(
@@ -20,29 +18,41 @@ export class OrderService {
     private readonly cartService: CartService
   ) {}
 
-  async PlaceOrder(cartId: number) {
-    const cart = await this.cartService.GetCartById(cartId);
-    const { cartItems } = cart;
+  async PlaceOrder(customerId: number) {
+    let cart: Cart = {};
+    let orderProcessor: OrderProcessor = new OrderProcessor(cart, [
+      new LockCartHandler(),
+      new InventoryCheckHandler(),
+      new PaymentHandler(),
+      new OrderCreateHandler(),
+      new ReleaseLockCartHandler(),
+    ]);
 
-    if (cartItems.length < 1) {
-      throw new BadRequestException("Cart is empty");
-    }
-    const order_details: DeepPartial<OrderDetails>[] = cartItems.map(
-      (item) => ({
-        menu_itemId: item.menuItemId,
-        order_details_price: item.price,
-        order_details_quantity: item.quantity,
-      })
-    );
+    let order = orderProcessor.Process();
 
-    const createdOrder = await this.orderRepo.createOrder({
-      customer: { id: cart.customerId },
-      order_status: 1,
-      order_total_amount: cart.totalAmount,
-      order_details,
-    });
+    /////
+    // const cart = await this.cartService.GetCartByCustomerId(customerId);
+    // const { cartItems } = cart;
 
-    await this.cartService.clear(cartId);
+    // if (cartItems.length < 1) {
+    //   throw new BadRequestException("Cart is empty");
+    // }
+    // const order_details: DeepPartial<OrderDetails>[] = cartItems.map(
+    //   (item) => ({
+    //     menu_itemId: item.menuItemId,
+    //     order_details_price: item.price,
+    //     order_details_quantity: item.quantity,
+    //   })
+    // );
+
+    // const createdOrder = await this.orderRepo.createOrder({
+    //   customer: { id: cart.customerId },
+    //   order_status: 1,
+    //   order_total_amount: cart.totalAmount,
+    //   order_details,
+    // });
+
+    // await this.cartService.clear(cartId);
 
     return createdOrder;
   }

@@ -6,27 +6,30 @@ import { orderService } from "../service/OrderService";
 import { MenuItem } from "../models/MenuItem";
 import { customerService } from "../service/CustomerService";
 import { HttpException } from "../../common/exceptions";
-import { menuItemService } from "../service/MenuItemService";
+import { StatusCodes, getReasonPhrase } from "http-status-codes";
+import { logger } from "../../common/logger";
 
 export const PlaceOrder = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   // Extract data from the request body
-  const cartId = parseInt(req.params.cartId);
+  const customerId = parseInt(req.params.customerId);
 
   try {
-    console.log(req.body);
+    logger.debug(req.body);
 
-    let oreder = await orderService.PlaceOrder(cartId);
+    let order = await orderService.PlaceOrder(customerId);
 
-    res.status(201).json({ message: "Order created successfully", oreder });
+    res
+      .status(StatusCodes.CREATED)
+      .json({ message: "Order created successfully", oreder: order });
   } catch (error: any) {
     if (error instanceof HttpException) {
       res.status(error.status).json({ error: error.message });
     } else {
       res
-        .status(500)
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ error: "Something went wrong. Please try again later" });
     }
   }

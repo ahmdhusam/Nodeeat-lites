@@ -11,7 +11,7 @@ import {
 
 export const router: Router = Router();
 
-router.route("/placeOrder/:cartId").post(PlaceOrder);
+router.route("/placeOrder/:customerId").post(PlaceOrder);
 router.route("/:orderId/cancel").post(CancelOrder);
 router.route("/:orderId/status").put(UpdateOrderStatus);
 router.route("/:customerId/history").get(OrdersHistory);

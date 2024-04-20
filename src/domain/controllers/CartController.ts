@@ -1,8 +1,5 @@
 import { Request, Response } from "express";
-import { cartRepository } from "../repositry/CartRepository";
-import { cartItemRepository } from "../repositry/CartItemRepository";
 import { CartService, cartService } from "../service/CartService";
-import { HttpException } from "../../common/exceptions";
 import { logger } from "../../common/logger";
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
 class CartController {
