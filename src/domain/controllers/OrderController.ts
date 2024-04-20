@@ -1,12 +1,6 @@
 import { Request, Response } from "express";
-import { Order } from "../models/Order";
-import { OrderDetails } from "../models/OrderDetails";
-import { OrderRepository } from "../repositry/OrderRepositry";
 import { orderService } from "../service/OrderService";
-import { MenuItem } from "../models/menu-item.entity";
-import { customerService } from "../service/CustomerService";
 import { HttpException } from "../../common/exceptions";
-import { menuItemService } from "../service/MenuItemService";
 import { BadRequestException } from "../../common/exceptions/BadRequestException";
 
 export const PlaceOrder = async (
