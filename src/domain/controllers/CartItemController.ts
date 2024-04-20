@@ -25,6 +25,7 @@ class CartItemController {
 
       res.status(StatusCodes.CREATED).json(cartItem);
     } catch (error) {
+      logger.error(error);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
@@ -39,6 +40,7 @@ class CartItemController {
 
       res.status(StatusCodes.NO_CONTENT).json();
     } catch (error) {
+      logger.error(error);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });

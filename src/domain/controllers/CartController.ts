@@ -25,11 +25,12 @@ class CartController {
   async ClearCart(req: Request, res: Response): Promise<void> {
     try {
       const customerId = parseInt(req.params.customerId);
-
+      logger.debug(`customerId:${customerId}`);
       await cartService.clear(customerId);
 
       res.status(StatusCodes.OK).json({ message: "Cart cleared successfully" });
     } catch (error) {
+      logger.error(error);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .json({ message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
