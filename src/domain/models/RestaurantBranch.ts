@@ -16,7 +16,11 @@ export class RestaurantBranch extends BaseEntityTemp {
   @PrimaryGeneratedColumn({ name: "restaurant_branch_id" })
   id: number;
 
-  @Column({ type: "enum", enum: RestaurantStatus })
+  @Column({
+    type: "enum",
+    enum: RestaurantStatus,
+    default: RestaurantStatus.closed,
+  })
   status: RestaurantStatus;
 
   @Column({ name: "opening_time", type: "time" })

@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { DataSource, ObjectLiteral } from "typeorm";
 import dotenv from "dotenv";
 import { Customer } from "../../models/Customer";

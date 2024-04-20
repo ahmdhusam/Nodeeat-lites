@@ -23,7 +23,7 @@ export class Restaurant extends BaseEntityTemp {
   @DeleteDateColumn({ name: "deleted_at" })
   deletedAt: Date;
 
-  @Column()
+  @Column({ nullable: true })
   restaurant_category_id: number;
 
   @ManyToOne(
