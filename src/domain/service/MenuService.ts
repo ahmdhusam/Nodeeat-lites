@@ -43,6 +43,44 @@ export class MenuService {
 
     return this.menuRepository.save(menu);
   }
+
+  async update(restaurantId: number, menuId: number, menuData: CreateMenuDto) {
+    const isRestaurantExist = await this.restaurantService.isRestaurantExistBy({
+      id: restaurantId,
+    });
+    if (!isRestaurantExist) {
+      throw new NotFoundException("Restaurant not found");
+    }
+
+    const isMenuExist = await this.menuRepository.isExistBy({
+      id: menuId,
+      restaurantId,
+    });
+    if (!isMenuExist) {
+      throw new NotFoundException("Menu Not Found");
+    }
+
+    return this.menuRepository.update(menuId, menuData);
+  }
+
+  async delete(restaurantId: number, menuId: number) {
+    const isRestaurantExist = await this.restaurantService.isRestaurantExistBy({
+      id: restaurantId,
+    });
+    if (!isRestaurantExist) {
+      throw new NotFoundException("Restaurant not found");
+    }
+
+    const isMenuExist = await this.menuRepository.isExistBy({
+      id: menuId,
+      restaurantId,
+    });
+    if (!isMenuExist) {
+      throw new NotFoundException("Menu Not Found");
+    }
+
+    return this.menuRepository.deleteById(menuId);
+  }
 }
 
 export const menuService = new MenuService(
