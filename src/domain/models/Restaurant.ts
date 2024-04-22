@@ -20,6 +20,9 @@ export class Restaurant extends BaseEntityTemp {
   @Column()
   description: string;
 
+  @Column({ default: true })
+  enabled: boolean;
+
   @DeleteDateColumn({ name: "deleted_at" })
   deletedAt: Date;
 

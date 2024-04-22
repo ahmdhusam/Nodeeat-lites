@@ -1,5 +1,7 @@
+import { NotFoundException } from "../../common/exceptions";
 import { ConflictException } from "../../common/exceptions/ConflictException";
 import { CreateRestaurantDto } from "../controllers/dtos/CreateRestaurantDto";
+import { UpdateRestaurantDto } from "../controllers/dtos/UpdateRestaurantDto";
 import {
   RestaurantRepository,
   restaurantRepository,
@@ -16,7 +18,46 @@ export class RestaurantService {
       throw new ConflictException("Restaurant already exists");
     }
 
-    return this.restaurantRepo.create(restaurantData);
+    const restaurant = this.restaurantRepo.create(restaurantData);
+
+    return this.restaurantRepo.save(restaurant);
+  }
+
+  updateRestaurant(restaurantId: number, restaurantData: UpdateRestaurantDto) {
+    const isRestaurantExist = this.restaurantRepo.isExistBy({
+      id: restaurantId,
+    });
+    if (!isRestaurantExist) {
+      throw new NotFoundException("Restaurant not found");
+    }
+
+    return this.restaurantRepo.update(restaurantId, restaurantData);
+  }
+
+  async enable(restaurantId: number) {
+    const isRestaurantExist = this.restaurantRepo.isExistBy({
+      id: restaurantId,
+    });
+    if (!isRestaurantExist) {
+      throw new NotFoundException("Restaurant not found");
+    }
+
+    await this.restaurantRepo.update(restaurantId, { enabled: true });
+  }
+
+  async disable(restaurantId: number) {
+    const isRestaurantExist = this.restaurantRepo.isExistBy({
+      id: restaurantId,
+    });
+    if (!isRestaurantExist) {
+      throw new NotFoundException("Restaurant not found");
+    }
+
+    await this.restaurantRepo.update(restaurantId, { enabled: false });
+  }
+
+  async getAllRestaurant() {
+    return this.restaurantRepo.findAll();
   }
 }
 
