@@ -1,8 +1,8 @@
 import { HttpException } from "./http.exception";
 import httpStatus from "http-status";
 
-export class NotFoundException extends HttpException {
+export class AlreadtExist extends HttpException {
   constructor(message: string) {
-    super(message, httpStatus.NOT_FOUND);
+    super(message, httpStatus.BAD_REQUEST);
   }
 }
