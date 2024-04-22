@@ -23,7 +23,7 @@ export const CatchErrors = () => (target: IClassConstructor) => {
         return await originalMethod.apply(this, [req, res, next]);
       } catch (error: unknown) {
         if (error instanceof HttpException) {
-          res.status(error.status).json({ error: error.message });
+          return res.status(error.status).json({ error: error.message });
         }
         next(error);
       }

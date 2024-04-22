@@ -30,12 +30,13 @@ app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(httpStatus.NOT_FOUND).json({
-    message: "Not Found",
+    message: req.url + " Not Found",
   });
 });
 // Express Error Handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   // TODO: Use winston for logging
+  console.log("Global Error Handler: ");
   console.error(err);
   res
     .status(500)

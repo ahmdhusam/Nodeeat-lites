@@ -7,8 +7,9 @@ export async function transformAndValidate<T extends object>(
   dtoClass: IClassConstructor<T>,
   input: object
 ): Promise<T> {
-  const dtoInstance = plainToInstance(dtoClass, input);
-
+  const dtoInstance = plainToInstance(dtoClass, input, {
+    enableImplicitConversion: true,
+  });
   const errors: ValidationError[] = await validate(dtoInstance, {
     whitelist: true,
     forbidNonWhitelisted: true,
