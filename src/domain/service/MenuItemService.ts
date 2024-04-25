@@ -1,4 +1,4 @@
-import { MenuItem } from "../models/menu-item.entity";
+import { MenuItem } from "../models/MenuItem";
 import {
   MenuItemRepository,
   menuItemRepository,

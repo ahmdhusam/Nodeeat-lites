@@ -1,8 +1,8 @@
 import { Repository } from "typeorm";
 
-import { MenuItem } from "../models/menu-item.entity";
 import { BaseRepository } from "./base.repository";
 import { dbContext } from "./database/db-context";
+import { MenuItem } from "../models/MenuItem";
 
 export class MenuItemRepository extends BaseRepository<MenuItem> {
   constructor(private readonly MenuItemRepo: Repository<MenuItem>) {
