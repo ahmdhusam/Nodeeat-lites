@@ -95,6 +95,24 @@ export class UserService {
     const user = await this.userRepo.get_user_by_email(email);
     return user;
   }
+  async forgot_password(email: string) {
+    const user = await this.userRepo.get_user_by_email(email);
+    if (!user) throw new NotFoundException("account does not exist");
+
+    const data_token = {
+      sub: user.email,
+    };
+    const token = this.create_access_token(data_token);
+    return token;
+  }
+  async reset_password(reset_token: string, new_password: string) {
+    const data = this.decode(reset_token);
+    console.log(data);
+    const email = data.sub;
+    const user = await this.userRepo.get_user_by_email(email);
+    const updated_password_hashed = await this.hash_pass(new_password);
+    await this.userRepo.update_password(email, updated_password_hashed);
+  }
 }
 
 export const userService = new UserService(userRepository, mailSender);

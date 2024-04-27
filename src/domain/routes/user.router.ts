@@ -6,7 +6,7 @@ export const router: Router = Router();
 
 router.route("/register").post(userController.register);
 router.route("/login").post(userController.login);
-router.route("/forget-password").post(userController.forgetPassword);
+router.route("/forgot-password").post(userController.forgotPassword);
 router.route("/reset-password/:reset_token").post(userController.resetPassword);
 router.route("/send-verify-token").post(userController.sendVerifyToken);
 router.route("/verify-account").get(userController.verifyAccount);

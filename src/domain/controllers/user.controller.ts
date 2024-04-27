@@ -55,12 +55,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const forgetPassword = async (
+export const forgotPassword = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    res.status(200).json({});
+    const { email } = req.body;
+    const token = await userService.forgot_password(email);
+    res.status(200).json({ reset_token: token });
   } catch (error: any) {
     if (error instanceof HttpException) {
       res.status(error.status).json({ error: error.message });
@@ -77,15 +79,15 @@ export const resetPassword = async (
   res: Response
 ): Promise<void> => {
   const { reset_token } = req.params;
+  const { new_password } = req.body;
   try {
-    res.status(200).json({});
+    await userService.reset_password(reset_token, new_password);
+    res.status(200).json({ updated: "OK" });
   } catch (error: any) {
     if (error instanceof HttpException) {
       res.status(error.status).json({ error: error.message });
     } else {
-      res
-        .status(httpStatus.INTERNAL_SERVER_ERROR)
-        .json({ error: "Something went wrong. Please try again later" });
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: error });
     }
   }
 };

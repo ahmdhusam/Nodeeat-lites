@@ -36,6 +36,11 @@ export class UserRepository extends BaseRepository<User> {
     user.is_activated = true;
     await this.userRepo.save(user);
   }
+  async update_password(email: string, new_password: string) {
+    const user: any = await this.userRepo.findOneBy({ email: email });
+    user.password = new_password;
+    await this.userRepo.save(user);
+  }
 }
 
 export const userRepository = new UserRepository(dbContext.getRepository(User));
