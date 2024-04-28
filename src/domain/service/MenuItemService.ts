@@ -1,3 +1,5 @@
+import { DeepPartial } from "typeorm";
+import { CreateMenuItemDto } from "../controllers/dtos/CreateMenuItemDto";
 import { MenuItem } from "../models/MenuItem";
 import {
   MenuItemRepository,
@@ -9,6 +11,10 @@ export class MenuItemService {
 
   async findById(id: number): Promise<MenuItem | null> {
     return await this.menuItemRepo.findOneById(id);
+  }
+
+  async createMany(menuItems: DeepPartial<MenuItem>[]) {
+    return this.menuItemRepo.createManyAndSave(menuItems);
   }
 }
 export const menuItemService = new MenuItemService(menuItemRepository);
