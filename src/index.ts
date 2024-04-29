@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import { dbContext } from "./domain/repositry/database/db-context";
 import { router as cartRouter } from "./domain/routes/cart.router";
 import { router as userRouter } from "./domain/routes/user.router";
+import hpp from "hpp";
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(bodyParser.json({ limit: "2kb" }));
 app.use(cookieParser());
+app.use(hpp());
 app.use(helmet());
 app.use(morgan("dev"));
 
