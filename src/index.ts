@@ -45,3 +45,8 @@ app.listen(PORT, async () => {
 
   console.log(`Server is running on port ${PORT}`);
 });
+
+process.on("uncaughtException", function (err) {
+  console.error(err);
+  process.exit(); // exit the process to avoid unknown state
+});
