@@ -15,7 +15,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "2kb" }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(morgan("dev"));
