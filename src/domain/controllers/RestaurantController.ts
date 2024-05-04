@@ -8,10 +8,20 @@ import { IClassConstructor } from "../../common/utiles/IClassConstructor";
 import { CatchErrors } from "../../common/utiles/CatchErrors";
 import httpStatus from "http-status";
 import { RestaurantIdParamsDto } from "./dtos/RestaurantIdParamsDto";
+import {
+  PaginationService,
+  paginationService,
+} from "../service/PaginationService";
+import { PaginationOptionsQueryDto } from "./dtos/PaginationOptionsQueryDto";
+import { NameOptionsQueryDto } from "./dtos/NameOptionsQueryDto";
+import { ILike } from "typeorm";
 
 @CatchErrors()
 export class RestaurantController {
-  constructor(private readonly restaurantService: RestaurantService) {}
+  constructor(
+    private readonly restaurantService: RestaurantService,
+    private readonly paginationService: PaginationService
+  ) {}
 
   // TODO: Who can create restaurant
   async createRestaurant(req: Request, res: Response) {
@@ -50,12 +60,27 @@ export class RestaurantController {
     return res.status(httpStatus.NO_CONTENT).json({});
   }
 
-  // TODO: Is it should be sorted ?!
-  async getAllRestaurant(req: Request, res: Response) {
-    const allRestaurant = await this.restaurantService.getAllRestaurant();
+  async getMany(req: Request, res: Response) {
+    const { page = 0, name } =
+      req.query as unknown as PaginationOptionsQueryDto & NameOptionsQueryDto;
 
-    return res.status(httpStatus.OK).json({ restaurant: allRestaurant });
+    const paginationOptions =
+      this.paginationService.calculatePaginationOptions(page);
+
+    const restaurants = await this.restaurantService.getManyAndPaginate(
+      name
+        ? {
+            name: ILike(`%${name}%`),
+          }
+        : {},
+      paginationOptions
+    );
+
+    return res.status(httpStatus.OK).json({ data: restaurants });
   }
 }
 
-export const restaurantController = new RestaurantController(restaurantService);
+export const restaurantController = new RestaurantController(
+  restaurantService,
+  paginationService
+);

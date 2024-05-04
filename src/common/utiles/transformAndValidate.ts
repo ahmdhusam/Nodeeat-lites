@@ -12,7 +12,7 @@ export async function transformAndValidate<T extends object>(
   });
   const errors: ValidationError[] = await validate(dtoInstance, {
     whitelist: true,
-    forbidNonWhitelisted: true,
+    // forbidNonWhitelisted: true,
     forbidUnknownValues: true,
   });
 

@@ -8,6 +8,7 @@ import {
   restaurantRepository,
 } from "../repositry/RestaurantRepository";
 import { Restaurant } from "../models/Restaurant";
+import { IPaginationOptions } from "../repositry/IPaginationOptions";
 
 export class RestaurantService {
   constructor(private readonly restaurantRepo: RestaurantRepository) {}
@@ -58,8 +59,11 @@ export class RestaurantService {
     await this.restaurantRepo.update(restaurantId, { enabled: false });
   }
 
-  async getAllRestaurant() {
-    return this.restaurantRepo.findAll();
+  getManyAndPaginate(
+    where: FindOptionsWhere<Restaurant>,
+    paginationOptions: IPaginationOptions<Restaurant>
+  ) {
+    return this.restaurantRepo.getManyAndPaginate(where, paginationOptions);
   }
 
   isRestaurantExistBy(where: FindOptionsWhere<Restaurant>) {

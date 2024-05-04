@@ -12,16 +12,6 @@ export class MenuRepository extends BaseRepository<Menu> {
   getMany(where: FindOptionsWhere<Menu>) {
     return this.menuRepository.findBy(where);
   }
-
-  getManyAndPaginate(
-    where: FindOptionsWhere<Menu>,
-    paginationOptions: IPaginationOptions<Menu>
-  ) {
-    return this.menuRepository.find({
-      where,
-      ...paginationOptions,
-    });
-  }
 }
 
 export const menuRepository = new MenuRepository(dbContext.getRepository(Menu));

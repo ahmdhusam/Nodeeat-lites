@@ -4,21 +4,23 @@ import { DtoMiddleware } from "../../common/middlewares/DtoMiddleware";
 import { CreateRestaurantDto } from "../controllers/dtos/CreateRestaurantDto";
 import { UpdateRestaurantDto } from "../controllers/dtos/UpdateRestaurantDto";
 import { RestaurantIdParamsDto } from "../controllers/dtos/RestaurantIdParamsDto";
+import { NameOptionsQueryDto } from "../controllers/dtos/NameOptionsQueryDto";
+import { PaginationOptionsQueryDto } from "../controllers/dtos/PaginationOptionsQueryDto";
 
 export const restaurantRouter: Router = Router();
 
 restaurantRouter
   .route("/")
   .post([
-    DtoMiddleware(CreateRestaurantDto),
+    DtoMiddleware("body", CreateRestaurantDto),
     restaurantController.createRestaurant,
   ]);
 
 restaurantRouter
   .route("/:restaurantId")
   .put([
-    DtoMiddleware(RestaurantIdParamsDto, "params"),
-    DtoMiddleware(UpdateRestaurantDto),
+    DtoMiddleware("params", RestaurantIdParamsDto),
+    DtoMiddleware("body", UpdateRestaurantDto),
     restaurantController.update,
   ]);
 
@@ -30,4 +32,7 @@ restaurantRouter
   .route("/:restaurantId/disable")
   .post(restaurantController.disable);
 
-restaurantRouter.route("/").get(restaurantController.getAllRestaurant);
+restaurantRouter
+  .route("/")
+  .all(DtoMiddleware("query", PaginationOptionsQueryDto, NameOptionsQueryDto))
+  .get(restaurantController.getMany);

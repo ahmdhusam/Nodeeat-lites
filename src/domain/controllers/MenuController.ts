@@ -4,14 +4,15 @@ import { RestaurantIdParamsDto } from "./dtos/RestaurantIdParamsDto";
 import httpStatus from "http-status";
 import { CatchErrors } from "../../common/utiles/CatchErrors";
 import { MenuParamsDto } from "./dtos/MenuParamsDto";
-import { FindOptionsWhere } from "typeorm";
+import { FindOptionsWhere, ILike, Like } from "typeorm";
 import { Menu } from "../models/Menu";
 import { IPaginationOptions } from "../repositry/IPaginationOptions";
-import { PaginationOptionsParamsDto } from "./dtos/PaginationOptionsParamsDto";
+import { PaginationOptionsQueryDto } from "./dtos/PaginationOptionsQueryDto";
 import {
   PaginationService,
   paginationService,
 } from "../service/PaginationService";
+import { NameOptionsQueryDto } from "./dtos/NameOptionsQueryDto";
 
 @CatchErrors()
 export class MenuController {
@@ -58,15 +59,22 @@ export class MenuController {
   }
 
   async getMany(req: Request, res: Response) {
-    const { page = 0 } = req.params as unknown as PaginationOptionsParamsDto;
+    const { page = 0, name } =
+      req.query as unknown as PaginationOptionsQueryDto & NameOptionsQueryDto;
 
     const paginationOptions =
       this.paginationService.calculatePaginationOptions(page);
 
     const menus = await this.menuService.getManyAndPaginate(
-      {},
+      name
+        ? {
+            name: ILike(`%${name}%`),
+          }
+        : {},
       paginationOptions
     );
+
+    return res.status(httpStatus.OK).json({ data: menus });
   }
 }
 

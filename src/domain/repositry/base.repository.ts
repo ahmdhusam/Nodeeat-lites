@@ -5,6 +5,7 @@ import {
   Repository,
 } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
+import { IPaginationOptions } from "./IPaginationOptions";
 
 export abstract class BaseRepository<T extends ObjectLiteral> {
   constructor(private readonly repo: Repository<T>) {}
@@ -38,5 +39,15 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
 
   async isExistBy(where: FindOptionsWhere<T>): Promise<boolean> {
     return this.repo.existsBy(where);
+  }
+
+  getManyAndPaginate(
+    where: FindOptionsWhere<T>,
+    paginationOptions: IPaginationOptions<T>
+  ) {
+    return this.repo.find({
+      where,
+      ...paginationOptions,
+    });
   }
 }
