@@ -36,9 +36,11 @@ class DBContext {
       //dropSchema: true,
     });
     initializeTransactionalContext({
-      storageDriver: StorageDriver.ASYNC_LOCAL_STORAGE,
+      storageDriver: StorageDriver.CLS_HOOKED,
     });
     addTransactionalDataSource(this.AppDBContext);
+
+    // queryRunner = dbContext.queryBuilder().createQueryRunner();
   }
   queryBuilder() {
     return this.AppDBContext;

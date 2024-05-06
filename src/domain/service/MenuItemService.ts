@@ -1,3 +1,4 @@
+import { Transactional } from "typeorm-transactional";
 import { NotFoundException } from "../../common/exceptions";
 import { InvalidOperation as InvalidOperationException } from "../../common/exceptions/InvalidOperation";
 import { MenuItem } from "../models/MenuItem";

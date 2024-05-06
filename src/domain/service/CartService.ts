@@ -4,13 +4,14 @@ import { ResourceLockedException } from "../../common/exceptions/ResourceLockedE
 import { Cart } from "../models/Cart";
 import { CartRepository, cartRepository } from "../repositry/CartRepository";
 import { CartItemService, cartItemService } from "./CartItemService";
+import { dbContext } from "../repositry/database/db-context";
 
 export class CartService {
   constructor(
     private readonly cartRepo: CartRepository,
     private readonly cartItemService: CartItemService
   ) {}
-  @Transactional()
+
   async lockCart(customerId: number) {
     let cart = await this.getCartByCustomerId(customerId);
 
@@ -18,9 +19,10 @@ export class CartService {
       throw new ResourceLockedException("Cart is locked");
     }
     cart.isLocked = true;
+    // await dbContext.queryRunner.manager.save(cart, { transaction: true });
     await this.cartRepo.save(cart);
   }
-  @Transactional()
+
   async unlockCart(customerId: number) {
     let cart = await this.getCartByCustomerId(customerId);
 
@@ -28,9 +30,10 @@ export class CartService {
       throw new ResourceLockedException("Cart isn't locked");
     }
     cart.isLocked = false;
+    //await dbContext.queryRunner.manager.save(cart, { transaction: true });
     await this.cartRepo.save(cart);
   }
-  @Transactional()
+
   async getCartByCustomerId(customerId: number) {
     const cart = await this.cartRepo.findOneBy({ customerId });
     if (!cart) {

@@ -13,6 +13,7 @@ import { OrderProcessor } from "./OrderHandler/OrderProcessor";
 import { Cart } from "../models/Cart";
 import { menuItemService } from "./MenuItemService";
 import { Transactional } from "typeorm-transactional";
+import { dbContext } from "../repositry/database/db-context";
 
 export class OrderService {
   constructor(
@@ -23,6 +24,7 @@ export class OrderService {
   async PlaceOrder(customerId: number) {
     try {
       //Create transaction
+      //await dbContext.queryRunner.startTransaction();
       let orderProcessor: OrderProcessor = new OrderProcessor(customerId, [
         new LockCartHandler(cartService),
         new InventoryCheckHandler(menuItemService, cartService),
@@ -32,9 +34,12 @@ export class OrderService {
       ]);
 
       let order = orderProcessor.Process();
+      // await dbContext.queryRunner.commitTransaction();
       //end transaction
       return order;
-    } catch (error) {}
+    } catch (error) {
+      //  await dbContext.queryRunner.rollbackTransaction();
+    }
   }
 
   async findBy(where: FindOptionsWhere<Order>): Promise<Order[]> {
