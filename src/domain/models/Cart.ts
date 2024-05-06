@@ -20,7 +20,8 @@ export class Cart extends BaseEntityTemp {
 
   @Column({ name: "customer_id" })
   customerId: number;
-
+  @Column({ name: "isLocked", default: false })
+  isLocked: boolean;
   @OneToOne(() => Customer, (customer) => customer.cart)
   @JoinColumn({ name: "customer_id" })
   customer: Customer;

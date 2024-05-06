@@ -19,16 +19,6 @@ export class CartItemService {
   ) {}
 
   async AddCartItem(customerId: number, menuItemId: number, quantity: number) {
-    /*
-
-- Get customerid 
-- get customerCart 
-- if no cart create cart 
--check menu item exists 
--check if item exists
-- add cartitem 
-
-*/
     let cart = await this.cartRepo.findOneBy({ customerId });
     if (!cart) {
       logger.debug(`no cart for customer: ${customerId}`);
@@ -48,8 +38,8 @@ export class CartItemService {
     });
 
     if (cartItem) {
-      cartItem.quantity = quantity;
-      await cartItem.save();
+      cartItem.quantity += quantity;
+      await cartItem.save(); // update item  throw exception if exists
     } else {
       const CartItem = cartItemRepository.create({
         cartId: cart.id,
@@ -64,11 +54,6 @@ export class CartItemService {
   }
 
   async DeleteCartItem(customerId: number, menuItemId: number) {
-    /*
-   -get CartFromCustomerid 
-   -delete cartitem 
-   */
-
     let cart = await this.cartRepo.findOneBy({ customerId });
     if (!cart) {
       throw new NotFoundException("cart not found");

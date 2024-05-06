@@ -12,12 +12,12 @@
     }
   ],
   "paths": {
-    "/api/v1/Carts/{cartId}": {
+    "/api/v1/Carts/{customerId}/cart/": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "cartId",
+            "name": "customerId",
             "in": "path",
             "required": true,
             "schema": {
@@ -26,11 +26,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "422": {
-            "description": "Unprocessable Entity"
+          "default": {
+            "description": ""
           }
         }
       },
@@ -38,7 +35,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "cartId",
+            "name": "customerId",
             "in": "path",
             "required": true,
             "schema": {
@@ -47,29 +44,18 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
+          "default": {
+            "description": ""
           }
         }
       }
     },
-    "/api/v1/Carts/{cartId}/cart-items/{cartItemId}": {
+    "/api/v1/Orders/placeOrder/{customerId}": {
       "post": {
         "description": "",
         "parameters": [
           {
-            "name": "cartId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "cartItemId",
+            "name": "customerId",
             "in": "path",
             "required": true,
             "schema": {
@@ -78,66 +64,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "422": {
-            "description": "Unprocessable Entity"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "cartId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "cartItemId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/v1/Orders/placeOrder/{cartId}": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "cartId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error"
+          "default": {
+            "description": ""
           }
         }
       }

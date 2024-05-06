@@ -5,12 +5,12 @@ import { StatusCodes, getReasonPhrase } from "http-status-codes";
 class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  async GetCart(req: Request, res: Response): Promise<void> {
+  async getCart(req: Request, res: Response): Promise<void> {
     const customerId = parseInt(req.params.customerId);
 
     logger.debug(`customerId:${customerId}`);
     try {
-      const cart = await this.cartService.GetCartByCustomerId(customerId);
+      const cart = await this.cartService.getCartByCustomerId(customerId);
       res.status(StatusCodes.OK).json({ details: cart });
     } catch (error) {
       res

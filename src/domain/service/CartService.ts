@@ -1,4 +1,5 @@
 import { NotFoundException } from "../../common/exceptions";
+import { ResourceLockedException } from "../../common/exceptions/ResourceLockedException";
 import { Cart } from "../models/Cart";
 import { CartRepository, cartRepository } from "../repositry/CartRepository";
 import { CartItemService, cartItemService } from "./CartItemService";
@@ -9,7 +10,25 @@ export class CartService {
     private readonly cartItemService: CartItemService
   ) {}
 
-  async GetCartByCustomerId(customerId: number) {
+  async lockCart(customerId: number) {
+    let cart = await this.getCartByCustomerId(customerId);
+
+    if (cart.isLocked) {
+      throw new ResourceLockedException("Cart is locked");
+    }
+    cart.isLocked = true;
+    await this.cartRepo.save(cart);
+  }
+  async unlockCart(customerId: number) {
+    let cart = await this.getCartByCustomerId(customerId);
+
+    if (!cart.isLocked) {
+      throw new ResourceLockedException("Cart isn't locked");
+    }
+    cart.isLocked = false;
+    await this.cartRepo.save(cart);
+  }
+  async getCartByCustomerId(customerId: number) {
     const cart = await this.cartRepo.findOneBy({ customerId });
     if (!cart) {
       throw new NotFoundException("Cart not found");

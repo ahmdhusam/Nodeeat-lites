@@ -1,7 +1,10 @@
 INSERT INTO customer(username, email) VALUES('John wick','John.wick@gmail.com');
 INSERT INTO cart(customer_id, total_amount) VALUES(1,0);
 INSERT INTO menu_item(menu_item_id) VALUES(1);
-
+INSERT INTO public.cart_items (created_at, updated_at, cart_items_id, price, quantity, cart_id, menu_item_id)
+VALUES
+    ('2024-04-27 10:00:00', '2024-04-27 10:00:00', 4, 10.99, 2, 1, 1)
+    
 INSERT INTO order_status(status) VALUES('PENDING');
 INSERT INTO order_status(status) VALUES('CANCELED');
 INSERT INTO order_status(status) VALUES('SUCCESS');

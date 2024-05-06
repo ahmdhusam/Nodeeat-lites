@@ -15,7 +15,7 @@ export class OrderDetails extends BaseEntityTemp {
   @PrimaryGeneratedColumn({ name: "order_details_id" })
   id: number;
 
-  @Column({ type: "float" })
+  @Column({ type: "money" })
   order_details_price: number;
 
   @Column({ type: "integer" })

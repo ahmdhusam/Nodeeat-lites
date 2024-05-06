@@ -11,6 +11,7 @@ import {
 import { CartService, cartService } from "./CartService";
 import { OrderProcessor } from "./OrderHandler/OrderProcessor";
 import { Cart } from "../models/Cart";
+import { menuItemService } from "./MenuItemService";
 
 export class OrderService {
   constructor(
@@ -19,42 +20,20 @@ export class OrderService {
   ) {}
 
   async PlaceOrder(customerId: number) {
-    let cart: Cart = {};
-    let orderProcessor: OrderProcessor = new OrderProcessor(cart, [
-      new LockCartHandler(),
-      new InventoryCheckHandler(),
-      new PaymentHandler(),
-      new OrderCreateHandler(),
-      new ReleaseLockCartHandler(),
-    ]);
+    try {
+      //Create transaction
+      let orderProcessor: OrderProcessor = new OrderProcessor(customerId, [
+        new LockCartHandler(cartService),
+        new InventoryCheckHandler(menuItemService, cartService),
+        new PaymentHandler(),
+        new OrderCreateHandler(orderRepository),
+        new ReleaseLockCartHandler(cartService),
+      ]);
 
-    let order = orderProcessor.Process();
-
-    /////
-    // const cart = await this.cartService.GetCartByCustomerId(customerId);
-    // const { cartItems } = cart;
-
-    // if (cartItems.length < 1) {
-    //   throw new BadRequestException("Cart is empty");
-    // }
-    // const order_details: DeepPartial<OrderDetails>[] = cartItems.map(
-    //   (item) => ({
-    //     menu_itemId: item.menuItemId,
-    //     order_details_price: item.price,
-    //     order_details_quantity: item.quantity,
-    //   })
-    // );
-
-    // const createdOrder = await this.orderRepo.createOrder({
-    //   customer: { id: cart.customerId },
-    //   order_status: 1,
-    //   order_total_amount: cart.totalAmount,
-    //   order_details,
-    // });
-
-    // await this.cartService.clear(cartId);
-
-    return createdOrder;
+      let order = orderProcessor.Process();
+      //end transaction
+      return order;
+    } catch (error) {}
   }
 
   async findBy(where: FindOptionsWhere<Order>): Promise<Order[]> {

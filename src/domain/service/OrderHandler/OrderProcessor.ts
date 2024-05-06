@@ -1,12 +1,14 @@
 import { Cart } from "../../models/Cart";
 import { Order } from "../../models/Order";
-import { IHandler } from "./IHandler";
+import { OrderHandler } from "./IHandler";
 
 export class OrderProcessor {
+  public order: Order;
+  public cart: Cart;
+  errors: string[];
   constructor(
-    public cart: Cart,
-    public order: Order,
-    private handlers: IHandler[]
+    public customerId: number,
+    private handlers: OrderHandler[]
   ) {
     for (let index = 0; index < handlers.length; index++) {
       const element = handlers[index];
@@ -17,6 +19,8 @@ export class OrderProcessor {
 
   public async Process(): Promise<Order | null> {
     await this.handlers[0].handle();
+
+    //
     return this.order;
   }
 }

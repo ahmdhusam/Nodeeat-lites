@@ -1,4 +1,5 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   OneToMany,
@@ -16,7 +17,8 @@ export class MenuItem extends BaseEntityTemp {
   id: number;
 
   price: number;
-
+  @Column({ name: "total_available", default: 10 })
+  TotalAvailable: number;
   @OneToOne(() => OrderDetails, (orderDetails) => orderDetails.id)
   order_details: OrderDetails;
 }

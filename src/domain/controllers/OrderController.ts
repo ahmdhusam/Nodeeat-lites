@@ -23,7 +23,7 @@ export const PlaceOrder = async (
 
     res
       .status(StatusCodes.CREATED)
-      .json({ message: "Order created successfully", oreder: order });
+      .json({ message: "Order created successfully", order: order });
   } catch (error: any) {
     if (error instanceof HttpException) {
       res.status(error.status).json({ error: error.message });
