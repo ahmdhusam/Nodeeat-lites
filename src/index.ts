@@ -3,12 +3,15 @@ import bodyParser from "body-parser";
 import helmet from "helmet";
 import httpStatus from "http-status";
 import morgan from "morgan";
-
+import "reflect-metadata";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger_output.json";
 import dotenv from "dotenv";
 import { dbContext } from "./domain/repositry/database/db-context";
 import { routes } from "./domain/routes/routes.index";
+import { initializeTransactionalContext } from "typeorm-transactional";
+
+initializeTransactionalContext();
 
 dotenv.config();
 const app = express();

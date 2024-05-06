@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { DataSource, ObjectLiteral } from "typeorm";
 import dotenv from "dotenv";
 import { Customer } from "../../models/Customer";
@@ -8,6 +7,11 @@ import { CartItem } from "../../models/CartItem";
 import { Order } from "../../models/Order";
 import { OrderDetails } from "../../models/OrderDetails";
 import { OrderStatus } from "../../models/OrderStatus";
+import {
+  initializeTransactionalContext,
+  addTransactionalDataSource,
+  StorageDriver,
+} from "typeorm-transactional";
 
 dotenv.config();
 
@@ -31,6 +35,10 @@ class DBContext {
       logging: true,
       //dropSchema: true,
     });
+    initializeTransactionalContext({
+      storageDriver: StorageDriver.ASYNC_LOCAL_STORAGE,
+    });
+    addTransactionalDataSource(this.AppDBContext);
   }
   queryBuilder() {
     return this.AppDBContext;

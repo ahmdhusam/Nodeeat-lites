@@ -33,10 +33,11 @@
     "pg": "^8.11.3",
     "pm2": "^5.3.1",
     "raw-body": "^2.5.2",
-    "reflect-metadata": "^0.2.1",
+    "reflect-metadata": "^0.2.2",
     "swagger-ui-express": "^5.0.0",
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",
+    "typeorm-transactional": "^0.5.0",
     "typescript": "^5.4.2",
     "winston": "^3.13.0",
     "xss-clean": "^0.1.4"

@@ -12,13 +12,14 @@ import { CartService, cartService } from "./CartService";
 import { OrderProcessor } from "./OrderHandler/OrderProcessor";
 import { Cart } from "../models/Cart";
 import { menuItemService } from "./MenuItemService";
+import { Transactional } from "typeorm-transactional";
 
 export class OrderService {
   constructor(
     private readonly orderRepo: OrderRepository,
     private readonly cartService: CartService
   ) {}
-
+  @Transactional()
   async PlaceOrder(customerId: number) {
     try {
       //Create transaction

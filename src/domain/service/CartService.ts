@@ -1,3 +1,4 @@
+import { Transactional } from "typeorm-transactional";
 import { NotFoundException } from "../../common/exceptions";
 import { ResourceLockedException } from "../../common/exceptions/ResourceLockedException";
 import { Cart } from "../models/Cart";
@@ -9,7 +10,7 @@ export class CartService {
     private readonly cartRepo: CartRepository,
     private readonly cartItemService: CartItemService
   ) {}
-
+  @Transactional()
   async lockCart(customerId: number) {
     let cart = await this.getCartByCustomerId(customerId);
 
@@ -19,6 +20,7 @@ export class CartService {
     cart.isLocked = true;
     await this.cartRepo.save(cart);
   }
+  @Transactional()
   async unlockCart(customerId: number) {
     let cart = await this.getCartByCustomerId(customerId);
 
@@ -28,6 +30,7 @@ export class CartService {
     cart.isLocked = false;
     await this.cartRepo.save(cart);
   }
+  @Transactional()
   async getCartByCustomerId(customerId: number) {
     const cart = await this.cartRepo.findOneBy({ customerId });
     if (!cart) {
