@@ -1,7 +1,10 @@
+import { Transactional } from "typeorm-transactional";
 import { NotFoundException } from "../../common/exceptions";
-import { Cart } from "../models/cart.entity";
+import { ResourceLockedException } from "../../common/exceptions/ResourceLockedException";
+import { Cart } from "../models/Cart";
 import { CartRepository, cartRepository } from "../repositry/CartRepository";
-import { CartItemService, cartItemService } from "./cart-item.service";
+import { CartItemService, cartItemService } from "./CartItemService";
+import { dbContext } from "../repositry/database/db-context";
 
 export class CartService {
   constructor(
@@ -9,9 +12,38 @@ export class CartService {
     private readonly cartItemService: CartItemService
   ) {}
 
-  async calculateTotalPrice(cartId: number): Promise<number> {
-    // TODO: Use database to calculate total price or calculate it on the server
+  async lockCart(customerId: number) {
+    let cart = await this.getCartByCustomerId(customerId);
 
+    if (cart.isLocked) {
+      throw new ResourceLockedException("Cart is locked");
+    }
+    cart.isLocked = true;
+    // await dbContext.queryRunner.manager.save(cart, { transaction: true });
+    await this.cartRepo.save(cart);
+  }
+
+  async unlockCart(customerId: number) {
+    let cart = await this.getCartByCustomerId(customerId);
+
+    if (!cart.isLocked) {
+      throw new ResourceLockedException("Cart isn't locked");
+    }
+    cart.isLocked = false;
+    //await dbContext.queryRunner.manager.save(cart, { transaction: true });
+    await this.cartRepo.save(cart);
+  }
+
+  async getCartByCustomerId(customerId: number) {
+    const cart = await this.cartRepo.findOneBy({ customerId });
+    if (!cart) {
+      throw new NotFoundException("Cart not found");
+    }
+
+    return cart;
+  }
+
+  async CalculateTotalPrice(cartId: number): Promise<number> {
     const cartItems = await this.cartItemService.findBy({ cartId });
 
     let total = 0;
@@ -23,14 +55,15 @@ export class CartService {
     return total;
   }
 
-  // TODO: Make sure the cart belongs to the user
-  async clear(cartId: number): Promise<void> {
-    const cart = await this.cartRepo.findOneById(cartId);
-    if (!cart) throw new NotFoundException("Cart not found");
+  async clear(customerId: number): Promise<void> {
+    const cart = await this.cartRepo.findOneBy({ customerId });
+    if (!cart) {
+      throw new NotFoundException("Cart not found");
+    }
 
-    await this.cartItemService.deleteBy({ cartId });
+    await this.cartItemService.deleteBy({ cartId: cart.id });
 
-    cart.totalAmount = await this.calculateTotalPrice(cart.id); // Or set it to 0 directly
+    cart.totalAmount = 0; // await this.calculateTotalPrice(cart.id); // Or set it to 0 directly
 
     await this.cartRepo.save(cart);
   }

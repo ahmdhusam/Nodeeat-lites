@@ -1,4 +1,5 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   OneToMany,
@@ -6,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { BaseEntityTemp } from "./templates/base.temp";
-import { Cart } from "./cart.entity";
-import { CartItem } from "./cart-item.entity";
+import { Cart } from "./Cart";
+import { CartItem } from "./CartItem";
 import { OrderDetails } from "./OrderDetails";
 
 @Entity("menu_item")
@@ -15,6 +16,9 @@ export class MenuItem extends BaseEntityTemp {
   @PrimaryGeneratedColumn({ name: "menu_item_id" })
   id: number;
 
+  price: number;
+  @Column({ name: "total_available", default: 10 })
+  TotalAvailable: number;
   @OneToOne(() => OrderDetails, (orderDetails) => orderDetails.id)
   order_details: OrderDetails;
 }

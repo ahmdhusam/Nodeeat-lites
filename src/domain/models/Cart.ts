@@ -2,11 +2,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { BaseEntityTemp } from "./templates/base.temp";
-import { Customer } from "./customer.entity";
+import { Customer } from "./Customer";
+import { CartItem } from "./CartItem";
 
 @Entity("cart")
 export class Cart extends BaseEntityTemp {
@@ -18,8 +20,12 @@ export class Cart extends BaseEntityTemp {
 
   @Column({ name: "customer_id" })
   customerId: number;
-
+  @Column({ name: "isLocked", default: false })
+  isLocked: boolean;
   @OneToOne(() => Customer, (customer) => customer.cart)
   @JoinColumn({ name: "customer_id" })
   customer: Customer;
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.cart, { eager: true })
+  cartItems: CartItem[];
 }

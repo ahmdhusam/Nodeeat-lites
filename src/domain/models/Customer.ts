@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { BaseEntityTemp } from "./templates/base.temp";
-import { Cart } from "./cart.entity";
+import { Cart } from "./Cart";
 import { Order } from "./Order";
 import { User } from "./user.entity";
 

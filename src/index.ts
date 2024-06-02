@@ -1,9 +1,12 @@
+import { dbContext } from "./domain/repositry/database/db-context";
 import express, { NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import httpStatus from "http-status";
 import morgan from "morgan";
-import winston from "winston";
+import "reflect-metadata";
+import swaggerUi from "swagger-ui-express";
+import swaggerOutput from "./swagger_output.json";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { dbContext } from "./domain/repositry/database/db-context";
@@ -11,6 +14,9 @@ import { router as cartRouter } from "./domain/routes/CartRouter";
 import { router as orderRouter } from "./domain/routes/OrderRouter";
 import { router as userRouter } from "./domain/routes/user.router";
 import hpp from "hpp";
+
+import { routes } from "./domain/routes/routes.index";
+import { initializeTransactionalContext } from "typeorm-transactional";
 
 dotenv.config();
 const app = express();
@@ -37,6 +43,12 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     .status(500)
     .send({ message: "Something went wrong. Please try again later." });
 });
+// Routes
+app.use("/", routes);
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+// app.use("/", (req: Request, res: Response) => {
+//   res.send("HELLO world any a ");
+// });
 
 // Start the server
 app.listen(PORT, async () => {

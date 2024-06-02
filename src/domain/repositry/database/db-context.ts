@@ -1,16 +1,20 @@
-import "reflect-metadata";
 import { DataSource, ObjectLiteral } from "typeorm";
 import dotenv from "dotenv";
-import { Customer } from "../../models/customer.entity";
-import { MenuItem } from "../../models/menu-item.entity";
-import { Cart } from "../../models/cart.entity";
-import { CartItem } from "../../models/cart-item.entity";
+import { Customer } from "../../models/Customer";
+import { MenuItem } from "../../models/MenuItem";
+import { Cart } from "../../models/Cart";
+import { CartItem } from "../../models/CartItem";
 import { Order } from "../../models/Order";
 import { OrderDetails } from "../../models/OrderDetails";
 import { OrderStatus } from "../../models/OrderStatus";
 import { User } from "../../models/user.entity";
 import { Role } from "../../models/role.entity";
 import { UserType } from "../../models/user-type.entity";
+import {
+  initializeTransactionalContext,
+  addTransactionalDataSource,
+  StorageDriver,
+} from "typeorm-transactional";
 
 dotenv.config();
 
@@ -33,9 +37,16 @@ class DBContext {
         Role,
         UserType,
       ],
-      synchronize: process.env.NODE_ENV === "development",
+      synchronize: true,
       logging: true,
+      //dropSchema: true,
     });
+    initializeTransactionalContext({
+      storageDriver: StorageDriver.CLS_HOOKED,
+    });
+    addTransactionalDataSource(this.AppDBContext);
+
+    // queryRunner = dbContext.queryBuilder().createQueryRunner();
   }
   queryBuilder() {
     return this.AppDBContext;

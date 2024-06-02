@@ -1,49 +1,35 @@
 import { Request, Response } from "express";
+import { CartService, cartService } from "../service/CartService";
+import { logger } from "../../common/logger";
+import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import { cartRepository } from "../repositry/CartRepository";
-import { cartItemRepository } from "../repositry/cart-item.repository";
-import { cartService } from "../service/CartService";
-import { HttpException } from "../../common/exceptions";
+import { cartItemService } from "../service/CartItemService";
 
-// export const getCart = async (req: Request, res: Response): Promise<void> => {
-//   try {
-//     const cartId = parseInt(req.params.cartId);
-//     let cart = await cartRepository.findOneById(cartId);
+export const getCart = async (req: Request, res: Response): Promise<void> => {
+  const customerId = parseInt(req.params.customerId);
 
-//     console.log("cart controller");
-//     res.status(200).json({ cart });
-//   } catch (error: any) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+  logger.debug(`customerId:${customerId}`);
 
-export const deleteCartItem = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
   try {
-    const cartId = parseInt(req.params.cartId);
-    await cartItemRepository.deleteById(cartId);
-
-    res.status(200).json({});
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
+    const cart = await cartService.getCartByCustomerId(customerId);
+    res.status(StatusCodes.OK).json({ details: cart });
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
   }
 };
-
-export const clearCart = async (req: Request, res: Response): Promise<void> => {
+export const ClearCart = async (req: Request, res: Response): Promise<void> => {
   try {
-    const cartId = parseInt(req.params.cartId);
+    const customerId = parseInt(req.params.customerId);
+    logger.debug(`customerId:${customerId}`);
+    await cartService.clear(customerId);
 
-    await cartService.clear(cartId);
-
-    res.status(200).json({ message: "Cart cleared successfully" });
-  } catch (error: unknown) {
-    if (error instanceof HttpException) {
-      res.status(error.status).json({ error: error.message });
-    } else {
-      res
-        .status(500)
-        .json({ error: "Something went wrong. Please try again later" });
-    }
+    res.status(StatusCodes.OK).json({ message: "Cart cleared successfully" });
+  } catch (error) {
+    logger.error(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) });
   }
 };

@@ -1,9 +1,9 @@
-import { FindOptionsWhere, Repository, createQueryBuilder } from "typeorm";
+import { DeepPartial, FindOptionsWhere, Repository } from "typeorm";
 
-import { BaseRepository } from "./base.repository";
+import { BaseRepository } from "./BaseRepository";
 import { Order } from "../models/Order";
 import { dbContext } from "./database/db-context";
-import { Customer } from "../models/customer.entity";
+import { Customer } from "../models/Customer";
 import { OrderStatus } from "../models/OrderStatus";
 import { OrderDetails } from "../models/OrderDetails";
 
@@ -62,6 +62,27 @@ export class OrderRepository extends BaseRepository<Order> {
       console.log(error.details);
       return "error";
     }
+  }
+
+  async createOrder(order: DeepPartial<Order>) {
+    const { order_details, ...orderData } = order;
+
+    return this.OrderRepo.manager.transaction<Order>(async (entityMangaer) => {
+      const orderRepository = entityMangaer.getRepository(Order);
+      const orderDetailRepository = entityMangaer.getRepository(OrderDetails);
+
+      const newOrder = orderRepository.create(orderData);
+      const newOrderDetails = orderDetailRepository.create(
+        order_details as DeepPartial<OrderDetails>[]
+      );
+
+      await orderRepository.save(newOrder);
+      await orderDetailRepository.save(
+        newOrderDetails.map((orderItem) => ({ ...orderItem, order: newOrder }))
+      );
+
+      return newOrder;
+    });
   }
 }
 export const orderRepository = new OrderRepository(

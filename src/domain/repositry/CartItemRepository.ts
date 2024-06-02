@@ -1,7 +1,7 @@
 import { FindOptionsWhere, Repository } from "typeorm";
 import { dbContext } from "./database/db-context";
-import { CartItem } from "../models/cart-item.entity";
-import { BaseRepository } from "./base.repository";
+import { CartItem } from "../models/CartItem";
+import { BaseRepository } from "./BaseRepository";
 
 export class CartItemRepository extends BaseRepository<CartItem> {
   constructor(private readonly cartItemRepo: Repository<CartItem>) {
