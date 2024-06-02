@@ -8,6 +8,9 @@ import { CartItem } from "../../models/cart-item.entity";
 import { Order } from "../../models/Order";
 import { OrderDetails } from "../../models/OrderDetails";
 import { OrderStatus } from "../../models/OrderStatus";
+import { User } from "../../models/user.entity";
+import { Role } from "../../models/role.entity";
+import { UserType } from "../../models/user-type.entity";
 
 dotenv.config();
 
@@ -26,6 +29,9 @@ class DBContext {
         Order,
         OrderDetails,
         OrderStatus,
+        User,
+        Role,
+        UserType,
       ],
       synchronize: process.env.NODE_ENV === "development",
       logging: true,

@@ -8,6 +8,7 @@ import {
 import { BaseEntityTemp } from "./templates/base.temp";
 import { Cart } from "./cart.entity";
 import { Order } from "./Order";
+import { User } from "./user.entity";
 
 @Entity("customer")
 export class Customer extends BaseEntityTemp {
@@ -17,12 +18,23 @@ export class Customer extends BaseEntityTemp {
   @OneToOne(() => Cart, (cart) => cart.customer)
   cart: Cart;
 
-  @Column()
-  username: string;
+  @OneToOne(() => User, (user) => user.customer)
+  user: User;
 
   @Column({ unique: true })
   email: string;
 
   @OneToMany(() => Order, (order) => order.customer)
   orders: Order[];
+  @Column({ type: "character varying", nullable: true })
+  login_name: string;
+
+  @Column({ default: () => "CURRENT_TIMESTAMP" })
+  last_visit: Date;
+
+  // @Column()
+  // username: string;
+
+  // @Column({ unique: true })
+  // email: string;
 }
