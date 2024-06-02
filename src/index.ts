@@ -1,10 +1,10 @@
+import "reflect-metadata";
 import { dbContext } from "./domain/repositry/database/db-context";
 import express, { NextFunction, Request, Response } from "express";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import httpStatus from "http-status";
 import morgan from "morgan";
-import "reflect-metadata";
 import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "./swagger_output.json";
 import dotenv from "dotenv";
@@ -30,15 +30,20 @@ app.use(helmet());
 app.use(morgan("dev"));
 
 // Routes
-app.use("/api/v1/carts", cartRouter);
-app.use("/api/v1/Orders", orderRouter);
 app.use("/api/v1/auth", userRouter);
-app.use("/", (req: Request, res: Response) => {
-  res.send("HELLO world any ");
-});
+app.use("/", routes);
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
 
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(httpStatus.NOT_FOUND).json({
+    message: req.url + " Not Found",
+  });
+});
 // Express Error Handler
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  // TODO: Use winston for logging
+  console.log("Global Error Handler: ");
+  console.error(err);
   res
     .status(500)
     .send({ message: "Something went wrong. Please try again later." });

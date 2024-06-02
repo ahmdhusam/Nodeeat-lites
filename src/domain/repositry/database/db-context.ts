@@ -15,6 +15,14 @@ import {
   addTransactionalDataSource,
   StorageDriver,
 } from "typeorm-transactional";
+import { Restaurant } from "../../models/Restaurant";
+import { RestaurantBranch } from "../../models/RestaurantBranch";
+import { RestaurantCategory } from "../../models/RestaurantCategory";
+import { Menu } from "../../models/Menu";
+import { MenuCategory } from "../../models/MenuCategory";
+import { Ingredient } from "../../models/Ingredient";
+import { Review } from "../../models/Review";
+import { Address } from "../../models/Address";
 
 dotenv.config();
 
@@ -27,7 +35,6 @@ class DBContext {
       url: url,
       entities: [
         Customer,
-        MenuItem,
         Cart,
         CartItem,
         Order,
@@ -36,6 +43,15 @@ class DBContext {
         User,
         Role,
         UserType,
+        Address,
+        RestaurantCategory,
+        Restaurant,
+        RestaurantBranch,
+        MenuCategory,
+        Menu,
+        MenuItem,
+        Ingredient,
+        Review,
       ],
       synchronize: true,
       logging: true,

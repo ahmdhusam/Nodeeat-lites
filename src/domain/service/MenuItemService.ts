@@ -1,6 +1,6 @@
-import { Transactional } from "typeorm-transactional";
 import { NotFoundException } from "../../common/exceptions";
 import { InvalidOperation as InvalidOperationException } from "../../common/exceptions/InvalidOperation";
+import { DeepPartial } from "typeorm";
 import { MenuItem } from "../models/MenuItem";
 import {
   MenuItemRepository,
@@ -23,6 +23,10 @@ export class MenuItemService {
       throw new NotFoundException("menu Item Doesnt Exist");
     }
     return item;
+  }
+
+  async createMany(menuItems: DeepPartial<MenuItem>[]) {
+    return this.menuItemRepo.createManyAndSave(menuItems);
   }
 }
 export const menuItemService = new MenuItemService(menuItemRepository);

@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
-import { Order } from "../models/Order";
-import { OrderDetails } from "../models/OrderDetails";
-import { OrderRepository } from "../repositry/OrderRepositry";
 import { orderService } from "../service/OrderService";
 import { MenuItem } from "../models/MenuItem";
 import { customerService } from "../service/CustomerService";
 import { HttpException } from "../../common/exceptions";
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import { logger } from "../../common/logger";
+import { BadRequestException } from "../../common/exceptions/BadRequestException";
 
 export const PlaceOrder = async (
   req: Request,
@@ -40,15 +38,51 @@ export const CancelOrder = async (
   res: Response
 ): Promise<void> => {
   try {
-  } catch (error: any) {}
+    const orderId = parseInt(req.params.orderId);
+    if (isNaN(orderId) || orderId <= 0) {
+      throw new BadRequestException("Invalid order id");
+    }
+
+    // TODO: Change customer id
+    const result = await orderService.cancelOrder(1, orderId);
+
+    res.status(200).json({ message: "Order cancelled" });
+  } catch (error: unknown) {
+    if (error instanceof HttpException) {
+      res.status(error.status).json({ error: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ error: "Something went wrong. Please try again later" });
+    }
+  }
 };
-export const UpdateOrderStatus = async (
+
+export const GetOrderStatus = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-  } catch (error: any) {}
+    const orderId = parseInt(req.params.orderId);
+    if (isNaN(orderId) || orderId <= 0) {
+      throw new BadRequestException("Invalid order id");
+    }
+
+    // TODO: Change customer id
+    const result = await orderService.getOrderStatus(1, orderId);
+
+    res.status(200).json({ message: { status: result } });
+  } catch (error: unknown) {
+    if (error instanceof HttpException) {
+      res.status(error.status).json({ error: error.message });
+    } else {
+      res
+        .status(500)
+        .json({ error: "Something went wrong. Please try again later" });
+    }
+  }
 };
+
 export const OrdersHistory = async (
   req: Request,
   res: Response
